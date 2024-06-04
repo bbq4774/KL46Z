@@ -54,7 +54,11 @@ uint8_t I2C_read(uint8_t registerAddress) {
 	I2C0->C1 &= ~I2C_C1_TX_MASK;	//Transmit Mode Select : 0 Receive
 	I2C0->C1 |= I2C_C1_TXAK_MASK;	//Transmit Acknowledge Enable : sent NAK
 	
-	data = I2C0->D;	//Receive data
+	data = I2C0->D;	//Receive data once
+	while(!(I2C0->S & I2C_S_IICIF_MASK));
+	I2C0->S |= I2C_S_IICIF_MASK;
+	
+	data = I2C0->D;	//Receive data twice
 	while(!(I2C0->S & I2C_S_IICIF_MASK));
 	I2C0->S |= I2C_S_IICIF_MASK;
 	

@@ -11,3 +11,4 @@
 .\objects\main.o: mag3110.h
 .\objects\main.o: i2c.h
 .\objects\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h
+.\objects\main.o: uart.h

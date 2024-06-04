@@ -43,6 +43,7 @@ void init_ITR_SW(void) {
 	//Select falling edge interrupts for PORTC[3].
 	PORTC->PCR[3]	|=  (0xA) << 16; //OR		PORTC->PCR[3] |= PORT_PCR_IRQC(0xA);
 	
+	NVIC_SetPriority(31, 0); //Set priority to SW1
 	NVIC_ClearPendingIRQ(31); // number for both PORTC and PORTD are 31
 	NVIC_EnableIRQ(31);
 }
