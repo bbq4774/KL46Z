@@ -2,6 +2,8 @@
 ".\objects\main.o"
 ".\objects\init.o"
 ".\objects\lcd.o"
+".\objects\mag3110.o"
+".\objects\i2c.o"
 ".\objects\startup_mkl46z4.o"
 ".\objects\system_mkl46z4.o"
 --strict --scatter ".\RTE\Device\MKL46Z256VLL4\MKL46Z256xxx4_flash.scf"

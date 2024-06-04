@@ -410,6 +410,26 @@
               <FileType>5</FileType>
               <FilePath>.\lcd.h</FilePath>
             </File>
+            <File>
+              <FileName>mag3110.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mag3110.c</FilePath>
+            </File>
+            <File>
+              <FileName>mag3110.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\mag3110.h</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\i2c.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -6,9 +6,9 @@ uint32_t TICK_Green = 1000; // 1000ms = 1Hz
 uint32_t TICK_Red = 500; // 500ms = 2Hz
 
 //Init CLK System
-void init_CLK()
-{
-	SIM->SCGC5 |= 1 << 10; //This enables the clock to PORTC
+void init_CLK() {
+	SIM->SCGC4 |= 1 << 6;  //This enables the clock I2C0
+	SIM->SCGC5 |= 1 << 10; //This enables the clock to PORTB
 	SIM->SCGC5 |= 1 << 11; //This enables the clock to PORTC
 	SIM->SCGC5 |= 1 << 12; //This enables the clock to PortD
 	SIM->SCGC5 |= 1 << 13; //This enables the clock to PortE

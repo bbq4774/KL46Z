@@ -1,14 +1,14 @@
 #include "lcd.h"
 
-const static uint8_t LCD_Frontplane_Pin[LCD_NUM_FRONTPLANE_PINS] = {LCD_FRONTPLANE0, LCD_FRONTPLANE1, LCD_FRONTPLANE2, LCD_FRONTPLANE3, LCD_FRONTPLANE4, LCD_FRONTPLANE5, LCD_FRONTPLANE6, LCD_FRONTPLANE7};
+const static uint8_t LCD_Frontplane_Pin[LCD_NUM_FRONTPLANE_PINS] = {LCD_FRONTPLANE0, LCD_FRONTPLANE1, 
+																																		LCD_FRONTPLANE2, LCD_FRONTPLANE3, 
+																																		LCD_FRONTPLANE4, LCD_FRONTPLANE5, 
+																																		LCD_FRONTPLANE6, LCD_FRONTPLANE7};
 const static uint8_t LCD_Backplane_Pin[LCD_NUM_BACKPLANE_PINS] = {LCD_BACKPLANE0, LCD_BACKPLANE1, LCD_BACKPLANE2, LCD_BACKPLANE3};
 
-void SegLCD_Init(void){ //Initializes all components of SLCD on the FRDM-KL46Z
-	
-	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK | SIM_SCGC5_SLCD_MASK; //Enable Clock to ports B, C, D and E, and SegLCD Peripheral
+void init_LCD(void){ //Initializes all components of SLCD on the FRDM-KL46Z
 	LCD->GCR |= LCD_GCR_PADSAFE_MASK; //Set PADSAFE to disable LCD while configuring
 	LCD->GCR &= ~LCD_GCR_LCDEN_MASK;  //Clear LCDEN (LCD Enable) while configuring
-	
 	
 	//Configure pins *From Reference manual, set pins to MUX 0 for normal LCD display operation
 	PORTB->PCR[7]  = PORT_PCR_MUX(0u);					//Set PTB7 to LCD_P7
@@ -135,10 +135,10 @@ void SegLCD_Init(void){ //Initializes all components of SLCD on the FRDM-KL46Z
 	LCD->GCR |= LCD_GCR_LCDEN_MASK;							//Set LCDEN to enable operation of LCD
 }
 
-void SegLCD_Set(uint8_t Value,uint8_t Digit){//Sets a value from 0-9
+void LCD_Set(uint8_t Value,uint8_t Digit){//Sets a value from 0-9
 	if (Digit > 4)
 	{
-		SegLCD_DisplayError();
+		LCD_DisplayError();
 		return;
 	}
 	if(Value==0x00)			{LCD->WF8B[LCD_Frontplane_Pin[((2*Digit)-2)]] = (LCD_SEG_D | LCD_SEG_E |LCD_SEG_F); 
@@ -163,13 +163,13 @@ void SegLCD_Set(uint8_t Value,uint8_t Digit){//Sets a value from 0-9
 												LCD->WF8B[LCD_Frontplane_Pin[((2*Digit)-1)]] = (LCD_SEG_A | LCD_SEG_B | LCD_SEG_C);}
 }
 
-void SegLCD_DisplayDecimal(uint16_t Value){//Displays a 3 Digit number in decimal
-	SegLCD_Set((Value - (Value/1000)*1000)/100,2);
-	SegLCD_Set((Value - (Value/100)*100)/10,3);
-	SegLCD_Set(Value - (Value/10)*10,4);
+void LCD_DisplayDecimal(uint16_t Value){//Displays a 3 Digit number in decimal
+	LCD_Set((Value - (Value/1000)*1000)/100,2);
+	LCD_Set((Value - (Value/100)*100)/10,3);
+	LCD_Set(Value - (Value/10)*10,4);
 }
 
-void SegLCD_DisplayError(){//Displays Err on screen
+void LCD_DisplayError(){//Displays Err on screen
 	LCD->WF8B[LCD_FRONTPLANE0] = (LCD_SEG_D | LCD_SEG_E | LCD_SEG_F | LCD_SEG_G);
 	LCD->WF8B[LCD_FRONTPLANE1] = (LCD_SEG_A);
 	LCD->WF8B[LCD_FRONTPLANE2] = (LCD_SEG_E | LCD_SEG_G);

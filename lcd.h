@@ -1,10 +1,10 @@
 #include "MKL46Z4.h"
 
 //Function Declarations
-void SegLCD_Init(void);
-void SegLCD_Set(uint8_t Value,uint8_t Digit);
-void SegLCD_DisplayDecimal(uint16_t Value);
-void SegLCD_DisplayError(void);
+void init_LCD(void);
+void LCD_Set(uint8_t Value,uint8_t Digit);
+void LCD_DisplayDecimal(uint16_t Value);
+void LCD_DisplayError(void);
 
 //Define Number of Front and Back plane pins
 #define LCD_NUM_FRONTPLANE_PINS 8
