@@ -1,0 +1,10 @@
+--cpu Cortex-M0+ --scatter "./RTE/Device/MKL46Z256VLL4/MKL46Z256xxx4_flash.scf"
+".\objects\main.o"
+".\objects\init.o"
+".\objects\lcd.o"
+".\objects\startup_mkl46z4.o"
+".\objects\system_mkl46z4.o"
+--strict --scatter ".\RTE\Device\MKL46Z256VLL4\MKL46Z256xxx4_flash.scf"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\compass.map" -o .\Objects\compass.axf
