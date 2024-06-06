@@ -25,18 +25,17 @@ void init_LCD(void){ //Initializes all components of SLCD on the FRDM-KL46Z
 	PORTE->PCR[5]  = PORT_PCR_MUX(0u);					//Set PTE5 to LCD_P53
 	
 	//Configure LCD_GCR - General Control Register
-	LCD->GCR =	LCD_GCR_RVTRIM(0x00) | 					//Set RVTRIM to 0, irrelevant as voltage regulator is disabled, but setting it to a known state.
-							LCD_GCR_CPSEL_MASK |						//Set LCD_GCR_CPSEL to use capacitor charge pump.
-							LCD_GCR_LADJ(0x03) |						//Set LCD_GCR_LADJ to 11, slow clock rate = lower power, but higher load capacitance on the LCD requires higher clock speed.
+	LCD->GCR =	LCD_GCR_CPSEL_MASK |						//Set LCD_GCR_CPSEL to use capacitor charge pump.
+							LCD_GCR_LADJ(0x03) |						//Set LCD_GCR_LADJ to 11, slow clock rate = lower power
 							LCD_GCR_PADSAFE_MASK |					//Set LCD_GCR_PADSAFE, leave enabled during configuration process.
-							LCD_GCR_ALTDIV(0x00) |					//Set LCD_GCR_ALTDIV to 11, divide alternate clock by 512.  This is assuming an 8MHz External Crystal is used.
-							LCD_GCR_FFR_MASK |							//Set LCD_GCR_FFR, allow an LCD Frame Frequency of 46.6Hz to 146.2Hz.  Disable to change range to 23.3Hz to 73.1Hz.
-							LCD_GCR_SOURCE_MASK |						//Set LCD_GCR_SOURCE, Part of setting clock source to OSCERCLK, or external oscillator.
-							LCD_GCR_LCLK(0x04) | 						//Set LCD_GCR_LCLK to 111, LCD Clock prescaler where LCD controller frame frequency = LCD clock/((DUTY  |  1) x 8 x (4 | LCLK[2:0]) x Y), where Y chosen by module duty cycle config
+							LCD_GCR_ALTDIV(0x03) |					//Set LCD_GCR_ALTDIV to 11, divide alternate clock by 512.  This is assuming an 8MHz External Crystal is used.
+							LCD_GCR_FFR_MASK |							//Set LCD_GCR_FFR, allow an LCD Frame Frequency of 46.6Hz to 146.2Hz.
+							LCD_GCR_SOURCE_MASK |						//Set LCD_GCR_SOURCE, Selects output of the alternate clock source selection as the LCD clock source.
+							LCD_GCR_LCLK(0x07) | 						//Set LCD_GCR_LCLK to 111, LCD controller frame frequency
 							LCD_GCR_DUTY(0x03);  						//Set LCD_GCR_DUTY to 011, Have 4 backplane pins, so need a 1/4 duty cycle.
 	
 	//Configure LCD_SEG_AR  - Auxiliary Register
-	LCD->AR = LCD_AR_BRATE(0x00);	//Set LCD_SEG_AR_BRATE to 000.  Frequency of blink is determined by LCD clock/(2^(12 + BRATE))
+	LCD->AR = LCD_AR_BRATE(0x00);	//Set LCD_SEG_AR_BRATE to 000. Frequency of blink is determined by LCD clock/(2^(12 + BRATE))
 						
 	//Configure LCD_SEG_FDCR - Fault Detect Control Register, controls use of Fault Detect features of SLCD.
 	LCD->FDCR = 0x00000000; //Clear all bits in FDCR
@@ -63,72 +62,12 @@ void init_LCD(void){ //Initializes all components of SLCD on the FRDM-KL46Z
 	LCD->BPEN[1] = LCD_BPEN_BPEN(1u<<8u) |			//LCD_P40, COM0
 								 LCD_BPEN_BPEN(1u<<20u);			//LCD_P52, COM1
 	
-	//Configure LCD_WFyTOx - Configures 4 Waveform signals, LCD_WF[z] is defined such that x = (z*4) and y = 3 | (z*4)
+	//Configure LCD_WFyTOx - Configures 4 Waveform signals
 	//Where x is the n index value of WFn on the least significant byte (bits 7-0) and y is the n index value of WFn on the most significant byte (bits 31-24)
-	LCD->WF[0]  = LCD_WF_WF0(0x00) |						//WF Pin 0 Disabled
-							  LCD_WF_WF1(0x00) |						//WF Pin 1 Disabled
-							  LCD_WF_WF2(0x00) |						//WF Pin 2 Disabled
-							  LCD_WF_WF3(0x00) ;						//WF Pin 3 Disabled
-	LCD->WF[1]  = LCD_WF_WF4(0x00) |						//WF Pin 4 Disabled
-							  LCD_WF_WF5(0x00) |						//WF Pin 5 Disabled
-							  LCD_WF_WF6(0x00) |						//WF Pin 6 Disabled
-							  LCD_WF_WF7(0x00) ;						//WF Pin 7 Off
-	LCD->WF[2]  = LCD_WF_WF8(0x00) |						//WF Pin 8 Off
-							  LCD_WF_WF9(0x00) |						//WF Pin 9 Disabled
-							  LCD_WF_WF10(0x00)|						//WF Pin 10 Off
-							  LCD_WF_WF11(0x00);						//WF Pin 11 Off
-	LCD->WF[3]  = LCD_WF_WF12(0x00)|						//WF Pin 12 Disabled
-							  LCD_WF_WF13(0x00)|						//WF Pin 13 Disabled
-							  LCD_WF_WF14(0x00)|						//WF Pin 14 Disabled
-							  LCD_WF_WF15(0x00);						//WF Pin 15 Disabled
-	LCD->WF[4]  = LCD_WF_WF16(0x00)|						//WF Pin 16 Disabled
-							  LCD_WF_WF17(0x00)|						//WF Pin 17 Off
-								LCD_WF_WF18(0x88)|						//WF Pin 18 (COM3) is enabled on Phases D and H
-								LCD_WF_WF19(0x44);						//WF Pin 19 (COM2) is enabled on Phases C and G
-	LCD->WF[5]  = LCD_WF_WF20(0x00)|						//WF Pin 20 Disabled
-							  LCD_WF_WF21(0x00)|						//WF Pin 21 Disabled
-							  LCD_WF_WF22(0x00)|						//WF Pin 22 Disabled
-							  LCD_WF_WF23(0x00);						//WF Pin 23 Disabled
-	LCD->WF[6]  = LCD_WF_WF24(0x00)|						//WF Pin 24 Disabled
-							  LCD_WF_WF25(0x00)|						//WF Pin 25 Disabled
-							  LCD_WF_WF26(0x00)|						//WF Pin 26 Disabled
-							  LCD_WF_WF27(0x00);						//WF Pin 27 Disabled
-	LCD->WF[7]  = LCD_WF_WF28(0x00)|						//WF Pin 28 Disabled
-							  LCD_WF_WF29(0x00)|						//WF Pin 29 Disabled
-							  LCD_WF_WF30(0x00)|						//WF Pin 30 Disabled
-							  LCD_WF_WF31(0x00);						//WF Pin 31 Disabled
-	LCD->WF[8]  = LCD_WF_WF32(0x00)|						//WF Pin 32 Disabled
-							  LCD_WF_WF33(0x00)|						//WF Pin 33 Disabled
-							  LCD_WF_WF34(0x00)|						//WF Pin 34 Disabled
-							  LCD_WF_WF35(0x00);						//WF Pin 35 Disabled
-	LCD->WF[9]  = LCD_WF_WF36(0x00)|						//WF Pin 36 Disabled
-							  LCD_WF_WF37(0x00)|						//WF Pin 37 Off
-							  LCD_WF_WF38(0x00)|						//WF Pin 38 Off
-							  LCD_WF_WF39(0x00);						//WF Pin 39 Disabled
-	LCD->WF[10] = LCD_WF_WF40(0x11)|						//WF Pin 40 (COM0) is enabled on Phases A and E
-							  LCD_WF_WF41(0x00)|						//WF Pin 41 Disabled
-							  LCD_WF_WF42(0x00)|						//WF Pin 42 Disabled
-							  LCD_WF_WF43(0x00);						//WF Pin 43 Disabled
-	LCD->WF[11] = LCD_WF_WF44(0x00)|						//WF Pin 44 Disabled
-							  LCD_WF_WF45(0x00)|						//WF Pin 45 Disabled
-							  LCD_WF_WF46(0x00)|						//WF Pin 46 Disabled
-							  LCD_WF_WF47(0x00);						//WF Pin 47 Disabled	
-	LCD->WF[12] = LCD_WF_WF48(0x00)|						//WF Pin 48 Disabled
-							  LCD_WF_WF49(0x00)|						//WF Pin 49 Disabled
-							  LCD_WF_WF50(0x00)|						//WF Pin 50 Disabled
-							  LCD_WF_WF51(0x00);						//WF Pin 51 Disabled
-	LCD->WF[13] = LCD_WF_WF52(0x22)|						//WF Pin 52 (COM1) is enabled on Phases B and F
-							  LCD_WF_WF53(0x00)|						//WF Pin 53 Off
-							  LCD_WF_WF54(0x00)|						//WF Pin 54 Disabled
-							  LCD_WF_WF55(0x00);						//WF Pin 55 Disabled
-	LCD->WF[14] = LCD_WF_WF56(0x00)|						//WF Pin 56 Disabled
-							  LCD_WF_WF57(0x00)|						//WF Pin 57 Disabled
-							  LCD_WF_WF58(0x00)|						//WF Pin 58 Disabled
-							  LCD_WF_WF59(0x00);						//WF Pin 59 Disabled
-	LCD->WF[15] = LCD_WF_WF60(0x00)|						//WF Pin 60 Disabled
-							  LCD_WF_WF61(0x00)|						//WF Pin 61 Disabled
-							  LCD_WF_WF62(0x00)|						//WF Pin 62 Disabled
-							  LCD_WF_WF63(0x00);						//WF Pin 63 Disabled
+	LCD->WF[4]  = LCD_WF_WF18(0x8)|						//WF Pin 18 (COM3) is enabled on Phases D
+								LCD_WF_WF19(0x4);						//WF Pin 19 (COM2) is enabled on Phases C
+	LCD->WF[10] = LCD_WF_WF40(0x1);						//WF Pin 40 (COM0) is enabled on Phases A
+	LCD->WF[13] = LCD_WF_WF52(0x2);					//WF Pin 52 (COM1) is enabled on Phases B
 								
 	//Disable GCR_PADSAFE and Enable GCR_LCDEN
 	LCD->GCR &= ~LCD_GCR_PADSAFE_MASK; 					//Clear PADSAFE to unlock LCD pins

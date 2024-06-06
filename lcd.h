@@ -11,14 +11,14 @@ void LCD_DisplayError(void);
 #define LCD_NUM_BACKPLANE_PINS 4
 
 //Create macros for segments
-#define LCD_SEG_D 0x11
-#define LCD_SEG_E 0x22
-#define LCD_SEG_G 0x44
-#define LCD_SEG_F 0x88
-#define LCD_SEG_C 0x22
-#define LCD_SEG_B 0x44
-#define LCD_SEG_A 0x88
-#define LCD_CLEAR 0x00
+#define LCD_SEG_D 0x1
+#define LCD_SEG_E 0x2
+#define LCD_SEG_G 0x4
+#define LCD_SEG_F 0x8
+#define LCD_SEG_C 0x2
+#define LCD_SEG_B 0x4
+#define LCD_SEG_A 0x8
+#define LCD_CLEAR 0x0
 
 //Create Macros for each pin
 #define LCD_FRONTPLANE0 37u
